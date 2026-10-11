@@ -1,0 +1,60 @@
+Agisci come un Senior Frontend Engineer ed esperto di architetture Local-First e PWA.
+
+### Obiettivo
+Riscrivere ed evolvere l'applicazione statica esistente "GiroLagoGarda" in una Single Page Application (SPA) / Progressive Web App (PWA) moderna, modulare, 100% offline-first e agnostica rispetto al percorso. L'app deve funzionare come motore universale per trekking a tappe, gestendo l'intero ciclo di vita del viaggio (creazione, editing, visualizzazione GPX, checklist e alloggi) tramite un singolo file JSON esportabile e importabile manualmente (ottimizzato per iOS Files/iCloud Drive).
+
+---
+
+### 1. Architettura Tecnica & Stack
+- **Frontend Core:** Vanilla JavaScript moderno (ES Modules) o framework ultraleggero senza build obbligatoria (oppure Vite + Vanilla JS), HTML5 semantico, CSS responsive mobile-first ottimizzato per iOS Safari (gestione safe-area-inset per notch/dynamic island).
+- **Persistenza Locale:** 
+  - Usare **IndexedDB** (tramite un wrapper snello come `idb-keyval` o Dexie.js) come sorgente primaria di verità. Nessuna perdita di dati al reload o alla chiusura del browser.
+  - All'avvio dell'applicazione, richiedere lo storage persistente: `if (navigator.storage && navigator.storage.persist) { navigator.storage.persist(); }`.
+- **Offline Shell:** Service Worker dedicato (`sw.js`) con strategia Cache-First per tutti gli asset statici (HTML, CSS, JS, icone, script di Leaflet e librerie grafiche).
+- **Zero Backend dipendente:** L'app non deve richiedere server, database cloud o API key a pagamento.
+
+---
+
+### 2. Modello Dati JSON Universale (Trekking Schema)
+L'intero stato dell'applicazione deve essere serializzabile in un unico file `.json`:
+```json
+{
+  "version": "1.0",
+  "meta": {
+    "id": "garda-2026",
+    "title": "Grande Giro del Garda 2026",
+    "startDate": "2026-10-03",
+    "endDate": "2026-10-11",
+    "description": "Itinerario a piedi attorno al Lago di Garda",
+    "paceConfig": { "flatKmH": 4.0, "elevUpMH": 400 }
+  },
+  "stages": [
+    {
+      "stageNumber": 1,
+      "date": "2026-10-03",
+      "from": "Desenzano",
+      "to": "Peschiera",
+      "distanceKm": 24.6,
+      "elevationGainM": 50,
+      "elevationLossM": 40,
+      "estimatedDurationHours": 5.0,
+      "accommodation": {
+        "name": "",
+        "address": "",
+        "phone": "",
+        "website": "",
+        "checkInNotes": "",
+        "coordinates": [45.438, 10.693]
+      },
+      "trackGeoJSON": null
+    }
+  ],
+  "checklists": {
+    "backpack": [
+      { "id": "b1", "category": "Abbigliamento", "item": "Guscio antivento", "checked": false }
+    ],
+    "evening": [
+      { "id": "e1", "item": "Ricarica powerbank", "checked": false }
+    ]
+  }
+}
