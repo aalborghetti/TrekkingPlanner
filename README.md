@@ -1,130 +1,118 @@
-# Grande Giro del Garda 2026
+# TrekkingPlanner
 
-Sito statico e raccolta di tracce GPX per un itinerario a piedi di nove giorni
-attorno al Lago di Garda, con partenza e ritorno a Desenzano del Garda dal
-3 all'11 ottobre 2026.
+**TrekkingPlanner** è una Progressive Web App (PWA) e Single Page Application (SPA) moderna, modulare, 100% offline-first e agnostica rispetto al percorso, nata dall'evoluzione del progetto *GiroLagoGarda*.
 
-Il progetto è pensato per essere consultato da smartphone durante il viaggio e
-può essere pubblicato direttamente con GitHub Pages. Dopo la prima apertura
-online, le pagine e le tracce principali restano disponibili anche senza
-connessione.
+Funziona come motore universale per trekking a tappe, gestendo l'intero ciclo di vita del viaggio (creazione, editing, visualizzazione GPX, checklist, calcolo del passo, alloggi e controlli serali) con persistenza locale in **IndexedDB** ed esportazione/importazione tramite un unico file JSON standard compatibile con iOS File, iCloud Drive e qualsiasi browser.
 
-## Itinerario
+---
 
-| Tappa | Data | Percorso | Lunghezza | D+ stimato | Tempo netto |
-|---:|---|---|---:|---:|---:|
-| 1 | 3 ottobre | Desenzano → Peschiera | 24,6 km | 50 m | 5 h |
-| 2 | 4 ottobre | Peschiera → Torri del Benaco | 25,9 km | 150 m | 5 h 30 |
-| 3 | 5 ottobre | Torri del Benaco → Malcesine | 25,5 km | 800 m | 6 h 30 |
-| 4 | 6 ottobre | Malcesine → Riva del Garda | 25,8 km | 1.150 m | 7 h |
-| 5 | 7 ottobre | Riva del Garda → Limone | 18,4 km | 1.150 m | 5 h 30 |
-| 6 | 8 ottobre | Limone → Campione | 12,5 km | 550 m | 3 h 30 |
-| 7 | 9 ottobre | Campione → Gargnano | 18,6 km | 950 m | 5 h 15 |
-| 8 | 10 ottobre | Gargnano → Salò | 23,4 km | 750 m | 6 h |
-| 9 | 11 ottobre | Salò → Desenzano | 26,9 km | 250 m | 5 h 45 |
+## Caratteristiche Principali
 
-Totale pianificato: **201,7 km** e circa **5.800 m di dislivello positivo**.
-Tempi e dislivelli sono stime; soste, fondo, meteo e orientamento vanno aggiunti
-al tempo netto.
+- **Local-First & Zero Backend:** Funziona al 100% nel browser del dispositivo, senza necessità di server, database cloud o API key a pagamento.
+- **Persistenza su IndexedDB:** Nessuna perdita di dati al reload o alla chiusura del browser. Supporto per la persistenza di sistema (`navigator.storage.persist()`).
+- **Offline Shell PWA:** Service Worker (`sw.js`) con strategia Cache-First per tutti gli asset (HTML, CSS, JS, icone, mappe e libreria Leaflet).
+- **Mobile-First & Ottimizzato per iOS Safari:** Gestione delle safe area inset per notch e Dynamic Island, layout reattivo con barra di navigazione inferiore su smartphone e barra superiore su desktop.
+- **Mappa Interattiva Leaflet & Parser GPX Integrato:**
+  - Caricamento e rendering istantaneo delle tracce con quote e distanze.
+  - Sfondo neutro funzionante al 100% offline e livelli online (OpenTopoMap, OpenStreetMap).
+  - Parser GPX lato client: trascina o carica un file `.gpx` per associarlo a una tappa o calcolarne dislivello e distanza.
+  - Marker e popup interattivi per gli alloggi e i punti tappa.
+- **Calcolo Dinamico del Passo:** Regola di Naismith personalizzabile con parametri di velocità in piano (km/h) e salita oraria (D+/h).
+- **Zaino & Calcolatore di Peso:** Checklist interattiva categorizzata per zaini da 35–40L, con stima dinamica del peso in base a litri d'acqua e cibo.
+- **Check Serale & Servizi:** Controlli di sicurezza salvati singolarmente per ogni tappa, meteo rapido e ricerca servizi nei paesi tappa.
+- **Modello Dati Universale (Trekking Schema v1.0):** Esporta o importa l'intero trekking in un singolo file compatto `.json`.
+- **Modello Predefinito:** Include pre-caricato l'itinerario completo del *Grande Giro del Garda 2026* (9 tappe, 201,7 km, 5.800 m D+, contatti strutture e tutte le tracce GPX originali).
 
-## Contenuto del sito
+---
 
-La cartella pronta da pubblicare è `mappa_gpx_originali_da_desenzano`.
+## Architettura e Modello Dati JSON (Trekking Schema)
 
-- `index.html`: home page del viaggio.
-- `tracce_gpx.html`: mappa interattiva delle nove tracce GPX originali,
-  rinumerate con partenza da Desenzano.
-- `tappe.html`: programma giornaliero con lunghezza, dislivelli, tempi,
-  contatti completi dei pernottamenti, meteo, piano B e rientri.
-- `materiale.html`: checklist dello zaino da 40 litri e indicazioni per
-  distribuire il materiale.
-- `check_serale.html`: controlli da eseguire prima di ogni tappa.
-- `servizi.html`: ricerche rapide per farmacie, alimentari, ristorazione e
-  acqua.
-- `01_...gpx`–`09_...gpx`: copie integre dei GPX originali nell'ordine di
-  percorrenza.
-- `leaflet.js` e `leaflet.css`: libreria cartografica inclusa localmente.
-- `site.js`, `sw.js` e `manifest.webmanifest`: installazione e cache offline.
-- `favicon.ico`, `apple-touch-icon.png`, `icon-192.png` e `icon-512.png`:
-  icona del sito e della schermata Home su iPhone.
-- `.nojekyll`: impedisce a GitHub Pages di elaborare il sito con Jekyll.
+L'intero stato dell'applicazione è serializzabile in un unico file `.json`:
 
-La mappa principale mostra le **tracce originali** del tour. Le distanze della
-pagina delle tappe si riferiscono invece al percorso personalizzato con raccordi
-alle strutture. I raccordi agli alberghi e la deviazione Crero–Pai non sono
-inclusi nei nove GPX originali della mappa.
-
-## Uso locale
-
-È possibile aprire direttamente `index.html`. In questa modalità pagine, GPX e
-sfondo neutro funzionano senza rete; OpenTopoMap e tutti i collegamenti esterni
-richiedono una connessione.
-
-Per provare anche il service worker offline, avviare un server HTTP nella
-cartella pubblicabile, per esempio:
-
-```bash
-python -m http.server 8000
+```json
+{
+  "version": "1.0",
+  "meta": {
+    "id": "garda-2026",
+    "title": "Grande Giro del Garda 2026",
+    "startDate": "2026-10-03",
+    "endDate": "2026-10-11",
+    "description": "Itinerario a piedi attorno al Lago di Garda",
+    "paceConfig": { "flatKmH": 4.5, "elevUpMH": 450 },
+    "packConfig": { "baseWeightKg": 7.2, "waterLiters": 2.0, "foodKg": 0.7 }
+  },
+  "stages": [
+    {
+      "stageNumber": 1,
+      "date": "2026-10-03",
+      "from": "Desenzano",
+      "to": "Peschiera",
+      "distanceKm": 24.6,
+      "elevationGainM": 50,
+      "elevationLossM": 40,
+      "estimatedDurationHours": 5.0,
+      "notes": "Percorso basso e urbanizzato...",
+      "planB": "Frequenti collegamenti ferroviari e bus...",
+      "accommodation": {
+        "name": "Meet Garda Lake Hostel",
+        "address": "Via Benaco 14/A, Peschiera del Garda",
+        "phone": "+390458240950",
+        "website": "https://www.meethostel.com/",
+        "checkInNotes": "Accesso con app della struttura.",
+        "coordinates": [45.438, 10.693]
+      },
+      "trackGeoJSON": { ... }
+    }
+  ],
+  "checklists": {
+    "backpack": [
+      { "id": "b1", "category": "Indossato", "item": "Scarpe da trekking collaudate", "checked": true }
+    ],
+    "evening": [
+      { "id": "e1", "item": "Ricarica powerbank", "checked": false }
+    ]
+  }
+}
 ```
 
-e aprire `http://localhost:8000`.
+---
 
-## Pubblicazione con GitHub Pages
+## Struttura del Progetto
 
-1. Creare un repository GitHub.
-2. Copiare **il contenuto** di `mappa_gpx_originali_da_desenzano` nella radice
-   del repository.
-3. Eseguire commit e push sul branch `main`.
-4. In **Settings → Pages**, scegliere **Deploy from a branch**.
-5. Selezionare il branch `main`, cartella `/ (root)`, quindi salvare.
-6. Aprire una volta il sito con connessione per completare la cache offline.
+```
+├── index.html               # Shell principale della SPA
+├── manifest.webmanifest     # Descrittore PWA (standalone, icone, tema)
+├── sw.js                    # Service Worker con cache-first offline shell
+├── default-trek.json        # Template iniziale (Giro del Garda 2026)
+├── css/
+│   ├── app.css              # Stili mobile-first, iOS safe-area, componenti UI
+│   └── leaflet.css          # Foglio di stile Leaflet
+├── js/
+│   ├── app.js               # Entry point e router hash-based client-side
+│   ├── db.js                # Wrapper IndexedDB Local-First e persistenza
+│   ├── models/
+│   │   ├── trek-schema.js   # Validazione schema e generatori modelli
+│   │   ├── pace-calculator.js # Calcolo tempi di percorrenza e passo
+│   │   └── gpx-parser.js    # Parser XML GPX -> GeoJSON con distanze e quote
+│   └── views/
+│       ├── dashboard-view.js # Panoramica, metriche e ritmo di marcia
+│       ├── stages-view.js    # Lista tappe, editor alloggi e dettagli
+│       ├── map-view.js       # Mappa interattiva Leaflet e visualizzatore GPX
+│       ├── checklist-view.js # Checklist zaino e calcolatore pesi
+│       ├── evening-view.js   # Check serale pre-tappa e appunti
+│       ├── services-view.js  # Servizi utili nei paesi tappa
+│       └── settings-view.js  # Import/Export JSON, diagnostica e backup
+├── leaflet.js               # Libreria cartografica Leaflet (inclusa localmente)
+├── icon-192.png             # Icona PWA mobile
+├── icon-512.png             # Icona splash screen / desktop
+├── apple-touch-icon.png     # Icona Home iOS Safari
+├── favicon.svg              # Favicon vettoriale SVG
+└── favicon.ico              # Favicon standard multi-formato
+```
 
-Non servono compilazione, dipendenze o database.
+---
 
-## Salvataggio dei dati
+## Utilizzo Locale e Distribuzione
 
-Le checklist del materiale e del controllo serale utilizzano `localStorage`
-del browser. I dati:
-
-- rimangono sul dispositivo;
-- non vengono inviati a un server;
-- non sono sincronizzati tra telefoni o browser;
-- vengono persi cancellando i dati del sito.
-
-Per contatti ICE, dati sanitari e conferme di prenotazione è consigliabile
-conservare una copia privata offline, separata dal sito pubblico.
-
-## Avvisi e limiti
-
-Il Comune di Torri del Benaco ha disposto la chiusura del sentiero e del ponte
-tibetano in località Crero dal **15 settembre al 14 dicembre 2026**. La
-deviazione ipotizzata sui sentieri 39 e 38 è basata sulla cartografia, ma non è
-una deviazione ufficiale e non è stata verificata sul terreno.
-
-Prima di ogni tappa occorre controllare:
-
-- previsioni e allerte meteorologiche;
-- nuove ordinanze e condizioni dei sentieri;
-- orari di bus e battelli della data esatta;
-- check-in della struttura successiva;
-- acqua, punti di rifornimento e ora del tramonto.
-
-Gli orari della Navigazione Laghi passano dall'orario estivo a quello invernale
-il **5 ottobre 2026**. Fontanelle, aperture commerciali e vie di fuga non sono
-presentate come informazioni garantite.
-
-Le tracce e le pagine del progetto sono strumenti di pianificazione e non
-sostituiscono segnaletica, cartografia escursionistica aggiornata, indicazioni
-degli enti gestori o valutazione delle condizioni sul posto.
-
-## Fonti principali
-
-- [Grande Giro del Garda – Trekking Etc.](https://www.trekking-etc.it/etc/trekking/it/trekking/grande-giro-del-garda/generale/tour)
-- [Ordinanza Crero – Comune di Torri del Benaco](https://comune.torridelbenaco.vr.it/it/news/ordinanza-chiusura-sentiero-e-ponte-tibetano-loc-crero)
-- [Navigazione Laghi – orari Lago di Garda](https://www.navigazionelaghi.it/biglietti-e-orari-lago-di-garda/)
-- [ATV Verona – orari extraurbani](https://tech.atv.verona.it/atv_www/orari_extraurb/orari/atv_localita_G.html)
-- [Arriva Brescia – orari invernali 2026/27](https://brescia.arriva.it/orari-invernali-2026-27/)
-- [Trentino Trasporti – Alto Garda](https://www.trentinotrasporti.it/it/viaggia-con-noi/urbano/alto-garda)
-- [Leaflet](https://leafletjs.com/) e [OpenTopoMap](https://opentopomap.org/)
-
-Le informazioni operative sono state ricontrollate il **30 settembre 2026**.
+- **Uso Locale:** Apri semplicemente `index.html` con un server statico locale (es. `npx serve`, o estensione *Live Server* di VS Code, oppure `python -m http.server 8000`).
+- **Pubblicazione su GitHub Pages:** È sufficiente abilitare GitHub Pages sul ramo `main`. Grazie al Service Worker e alla struttura agnostica statica, l'applicazione sarà installabile come PWA su iPhone (Safari -> *Aggiungi alla schermata Home*) e Android (Chrome -> *Installa app*).

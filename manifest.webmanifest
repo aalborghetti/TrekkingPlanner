@@ -1,13 +1,26 @@
 {
-  "name": "Grande Giro del Garda 2026",
-  "short_name": "Giro Garda",
+  "name": "TrekkingPlanner",
+  "short_name": "TrekkingPlanner",
+  "description": "Motore universale per trekking a tappe, offline-first e local-first.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#eef2ed",
   "theme_color": "#153f61",
   "lang": "it",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
   ]
 }

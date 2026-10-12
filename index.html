@@ -1,28 +1,91 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Grande Giro del Garda · 3–11 ottobre 2026</title>
-<style>
-:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#17212b;background:#eef2ed;line-height:1.45}
-*{box-sizing:border-box}body{margin:0}.wrap{max-width:980px;margin:auto;padding:0 18px}
-.hero{background:linear-gradient(135deg,#123a5c,#176b69);color:#fff;padding:24px 0 48px}.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:30px}.nav a{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;background:#ffffff18;border:1px solid #ffffff35;border-radius:8px;padding:7px 10px;font-weight:700;font-size:14px}.ui-icon{width:17px;height:17px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.eyebrow{font-size:14px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;color:#bfe4dc}
-h1{font-size:38px;line-height:1.12;margin:9px 0 12px;max-width:720px}.intro{font-size:19px;max-width:700px;color:#eef8f6;margin:0}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.stat{background:#ffffff18;border:1px solid #ffffff35;border-radius:9px;padding:10px 14px;min-width:150px}.stat strong{display:block;font-size:21px}.stat span{font-size:13px;color:#e8f2f1}
-main{padding:30px 0 45px}h2{font-size:22px;margin:0 0 14px}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card{display:flex;flex-direction:column;background:#fff;border:1px solid #d2dbd3;border-radius:13px;padding:20px;text-decoration:none;color:#17212b;box-shadow:0 3px 12px #17212b0b;transition:transform .15s,box-shadow .15s}.card:hover{transform:translateY(-2px);box-shadow:0 7px 20px #17212b18}.icon{display:grid;place-items:center;width:42px;height:42px;border-radius:10px;background:#e8f0ed;color:#153f61}.icon .ui-icon{width:24px;height:24px}.card h3{font-size:20px;margin:12px 0 6px;color:#153f61}.card p{margin:0 0 18px;color:#536059}.go{margin-top:auto;color:#157257;font-weight:800}
-.notice{margin-top:22px;background:#fff8dd;border-left:5px solid #d69e00;border-radius:8px;padding:13px 15px}.notice p{margin:4px 0}.foot{padding:18px 0 30px;color:#5e6a64;font-size:13px;text-align:center}
-@media(max-width:720px){.hero{padding:16px 0 31px}.wrap{padding-left:12px;padding-right:12px}.nav{margin-bottom:24px}.nav a{padding:8px 9px}h1{font-size:29px}.intro{font-size:17px}.stats{display:grid;grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}.cards{grid-template-columns:1fr}.card{padding:17px}}
-</style>
-<link rel="icon" href="favicon.ico" sizes="any"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Giro Garda"></head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#153f61">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TrekkingPlanner">
+  <title>TrekkingPlanner · Motore Universale per Trekking a Tappe</title>
+
+  <!-- PWA & Icons -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/leaflet.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
 <body>
-<header class="hero"><div class="wrap"><nav class="nav"><a href="index.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10M9.5 20v-6h5v6"/></svg><span>Home</span></a><a href="tracce_gpx.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 6h4a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/></svg><span>Tracce GPX</span></a><a href="tappe.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="4" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1" fill="currentColor" stroke="none"/><path d="M8 6h12M8 12h12M8 18h12"/></svg><span>Tappe</span></a><a href="materiale.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 7V5a4 4 0 0 1 8 0v2M9 21v-3h6v3"/><path d="M6 21V10a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v11zM6 13h12"/></svg><span>Materiale</span></a><a href="check_serale.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16.5 9"/></svg><span>Check serale</span></a><a href="servizi.html"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg><span>Servizi</span></a></nav><div class="eyebrow">Trekking itinerante · Lago di Garda</div><h1>Grande Giro del Garda</h1><p class="intro">Nove giorni a piedi da Desenzano, lungo entrambe le sponde del lago, con ritorno al punto di partenza.</p><div class="stats"><div class="stat"><strong>3–11 ottobre</strong><span>2026</span></div><div class="stat"><strong>201,7 km</strong><span>percorso pianificato</span></div><div class="stat"><strong>5.800 m D+</strong><span>dislivello stimato</span></div></div></div></header>
-<main><div class="wrap"><h2>Consulta il viaggio</h2><div class="cards">
-<a class="card" href="tracce_gpx.html"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 6h4a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/></svg></span><h3>Tracce GPX</h3><p>Mappa interattiva delle nove tracce originali, rinumerate con partenza da Desenzano. Funziona anche offline.</p><span class="go">Apri la mappa →</span></a>
-<a class="card" href="tappe.html"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="4" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1" fill="currentColor" stroke="none"/><path d="M8 6h12M8 12h12M8 18h12"/></svg></span><h3>Le tappe</h3><p>Programma giornaliero espandibile con lunghezza, dislivelli, tempo stimato, pernottamenti e meteo.</p><span class="go">Consulta le tappe →</span></a>
-<a class="card" href="materiale.html"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 7V5a4 4 0 0 1 8 0v2M9 21v-3h6v3"/><path d="M6 21V10a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v11zM6 13h12"/></svg></span><h3>Materiale</h3><p>Checklist interattiva, peso dello zaino, disposizione dei 40 litri e quantità d’acqua per ogni giornata.</p><span class="go">Prepara lo zaino →</span></a>
-<a class="card" href="check_serale.html"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16.5 9"/></svg></span><h3>Check serale</h3><p>Controlli per preparare la tappa successiva, salvati separatamente per giornata.</p><span class="go">Controlla →</span></a>
-<a class="card" href="servizi.html"><span class="icon"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg></span><h3>Servizi utili</h3><p>Ricerche rapide di farmacie, alimentari, ristorazione e acqua nei paesi tappa.</p><span class="go">Cerca →</span></a>
-</div><div class="notice"><b>Prima di ogni tappa</b><p>Controlla previsioni, allerte e condizioni dei sentieri. Le tracce non sostituiscono la segnaletica presente sul terreno.</p></div></div></main>
-<footer class="foot"><div class="wrap">Grande Giro del Garda · itinerario personale 2026</div></footer>
-<script src="site.js" defer></script></body></html>
+
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="wrap app-header-inner">
+      <a href="#/" class="header-brand">
+        <img src="icon-192.png" alt="TrekkingPlanner Logo" class="header-logo">
+        <span class="header-title-text" id="header-trek-name">TrekkingPlanner</span>
+      </a>
+
+      <!-- Desktop Navigation Bar -->
+      <nav class="desktop-nav">
+        <a href="#/" class="nav-link active">Panoramica</a>
+        <a href="#/tappe" class="nav-link">Tappe</a>
+        <a href="#/mappa" class="nav-link">Mappa & GPX</a>
+        <a href="#/materiale" class="nav-link">Zaino</a>
+        <a href="#/check-serale" class="nav-link">Check Serale</a>
+        <a href="#/servizi" class="nav-link">Servizi</a>
+        <a href="#/impostazioni" class="nav-link">Backup & Impostazioni</a>
+      </nav>
+
+      <div class="header-right">
+        <span id="save-indicator" class="save-indicator">Salvato ✓</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main SPA Viewport Container -->
+  <main id="app-main-content">
+    <div class="wrap content-area">
+      <div class="card">
+        <p>Caricamento itinerario in corso...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar (iOS Safari & Android PWA) -->
+  <nav class="bottom-nav" aria-label="Navigazione Principale">
+    <a href="#/" class="bottom-nav-item active">
+      <span class="bn-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="#/tappe" class="bottom-nav-item">
+      <span class="bn-icon">🥾</span>
+      <span>Tappe</span>
+    </a>
+    <a href="#/mappa" class="bottom-nav-item">
+      <span class="bn-icon">🗺️</span>
+      <span>Mappa</span>
+    </a>
+    <a href="#/materiale" class="bottom-nav-item">
+      <span class="bn-icon">🎒</span>
+      <span>Zaino</span>
+    </a>
+    <a href="#/check-serale" class="bottom-nav-item">
+      <span class="bn-icon">🌙</span>
+      <span>Check</span>
+    </a>
+    <a href="#/impostazioni" class="bottom-nav-item">
+      <span class="bn-icon">⚙️</span>
+      <span>Dati</span>
+    </a>
+  </nav>
+
+  <!-- Leaflet & App ES Modules -->
+  <script src="leaflet.js"></script>
+  <script type="module" src="js/app.js?v=1.2"></script>
+</body>
+</html>
